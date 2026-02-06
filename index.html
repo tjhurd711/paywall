@@ -502,8 +502,8 @@
   function buildStripeUrl(priceType) {
     // These will be Stripe Payment Links or Checkout Sessions
     // Pass uid + email as metadata so the webhook can tie payment to order
-    const baseSlideshow = 'https://buy.stripe.com/REPLACE_SLIDESHOW_LINK';
-    const baseBundle    = 'https://buy.stripe.com/REPLACE_BUNDLE_LINK';
+    const baseSlideshow = 'https://buy.stripe.com/test_cNi3co2lXb4Qg189cwbZe03';
+    const baseBundle    = 'https://buy.stripe.com/test_14AaEQ7Ghfl64iq0G0bZe04';
 
     const base = priceType === 'slideshow' ? baseSlideshow : baseBundle;
     // Stripe Payment Links support ?client_reference_id and ?prefilled_email
