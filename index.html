@@ -408,15 +408,6 @@
          style="display:none;">
         📱 Tap to View Slideshow in New Tab
       </a>
-
-      <div class="preview-actions">
-        <a id="editSlidesBtn" class="btn-preview" href="" target="_blank">
-          🎨 Edit My Slides (edits auto-save)
-        </a>
-        <button class="btn-preview" onclick="refreshPreview()">
-          🔄 Refresh Preview
-        </button>
-      </div>
     </div>
   </div>
 
@@ -573,12 +564,6 @@
 
       editBtn.href = slideshowUrl;
     }
-  }
-
-  /* ── Refresh Preview ── */
-  function refreshPreview() {
-    const iframe = document.getElementById('previewIframe');
-    if (iframe.src) iframe.src = iframe.src;
   }
 
   /* ── Answer Handling ── */
