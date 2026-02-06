@@ -389,6 +389,12 @@
     </div>
   </div>
 
+  <div style="padding: 0 24px 20px;">
+    <p style="font-size: 15px; color: #555; line-height: 1.6; text-align: center; font-style: italic;">
+      We do not expect this initial draft to be perfect. Should you decide to purchase a tribute slideshow or memorial video with Memorial Video AI, you will have the opportunity to make edits, adds and deletions to perfect and personalize your tribute.
+    </p>
+  </div>
+
   <div class="question-section">
     <div class="question-card">
       <h2>Are you happy with the initial draft slideshow?</h2>
@@ -433,8 +439,8 @@
 <!-- Confirmation Modal -->
 <div class="modal-overlay" id="confirmModal">
   <div class="confirm-modal">
-    <h3>Are you fully ready to be done with Memorial Video AI?</h3>
-    <p>You will not be able to access the Memorial Video or Slideshow from here on out.</p>
+    <h3>Are you sure you want to stop the tribute creation process with Memorial Video AI?</h3>
+    <p>Remember, you can fully edit this draft and we do offer a money back guarantee if you are not happy with your final slideshow or video.</p>
     <div class="confirm-btns">
       <button class="confirm-btn go-back" onclick="closeConfirmModal()">No, Go Back</button>
       <button class="confirm-btn yes-done" onclick="showThankYou()">Yes, I'm Done</button>
@@ -458,8 +464,9 @@
   const firstName     = params.get('firstName') || '';
   const fullName      = params.get('fullName') || '';
   const slideshowUrl  = params.get('slideshowUrl') || '';
-  const customerFirst = params.get('customerFirstName') || '';
-
+  const deceasedFirst = params.get('deceasedFirstName') || '';
+  const deceasedFull  = params.get('deceasedFullName') || '';
+  
   function buildStripeUrl(priceType) {
     const baseSlideshow = 'https://buy.stripe.com/test_cNi3co2lXb4Qg189cwbZe03';
     const baseBundle    = 'https://buy.stripe.com/test_14AaEQ7Ghfl64iq0G0bZe04';
@@ -473,10 +480,12 @@
   }
 
   (function init() {
-    if (firstName) {
+    const displayName = deceasedFirst || firstName;
+    const displayFull = deceasedFull || fullName || displayName;
+    if (displayName) {
       document.getElementById('pageTitle').textContent =
-        `Review Draft Sort & Slides for ${firstName}'s Tribute`;
-      document.title = `Review Tribute for ${fullName || firstName}`;
+        `Review Draft Sort & Slides for ${displayName}'s Tribute`;
+      document.title = `Review Tribute for ${displayFull}`;
     }
     document.getElementById('buySlideshow').href = buildStripeUrl('slideshow');
     document.getElementById('buyBundle').href    = buildStripeUrl('bundle');
@@ -526,6 +535,7 @@
     } else {
       document.querySelector('.answer-btn.no').classList.add('selected');
       purchaseEl.classList.remove('show');
+      document.getElementById('confirmModal').classList.add('show');
     }
   }
 
@@ -540,6 +550,17 @@
   function showThankYou() {
     document.getElementById('confirmModal').classList.remove('show');
     document.getElementById('thankYouModal').classList.add('show');
+
+    // Send opt-out email
+    fetch('https://4hyy6kr2id.execute-api.us-east-2.amazonaws.com/prod/opt-out-email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: email,
+        firstName: firstName,
+        uid: uid
+      })
+    }).catch(err => console.error('[OPT-OUT EMAIL]', err));
   }
 </script>
 </body>
