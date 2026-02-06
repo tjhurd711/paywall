@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Your Memorial Tribute</title>
+  <link rel="icon" type="image/svg+xml" 
+        href="https://www.dropbox.com/scl/fi/7tqrvmnchu17tkatqa9l5/MemorialVideoAI-Favicon.svg?rlkey=5cj4gwyhq3frrupo1g1d3y8so&st=znzwkpy9&raw=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #a8c5e6 0%, #c1d9f0 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #e8e8e8;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      border: 16px solid #1e3c72;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #e8e8e8;
+      padding: 30px 30px 20px;
+      text-align: center;
+    }
+
+    .header-logo {
+      max-width: 420px;
+      height: auto;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      color: #1e3c72;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    /* ── Preview Section ── */
+    .preview-wrap {
+      padding: 0 24px 24px;
+    }
+
+    .preview-box {
+      background: #f0f7ff;
+      border: 2px solid #2196F3;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .preview-label {
+      font-weight: 600;
+      color: #1565c0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .preview-iframe {
+      width: 100%;
+      height: 460px;
+      border: 2px solid #90caf9;
+      border-radius: 8px;
+      background: white;
+    }
+
+    .preview-actions {
+      margin-top: 16px;
+      text-align: center;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-preview {
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 12px rgba(30,60,114,.3);
+    }
+
+    .btn-preview:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(30,60,114,.45);
+    }
+
+    /* Mobile preview fallback */
+    .mobile-open-btn {
+      display: block;
+      padding: 40px;
+      background: white;
+      border: 2px solid #90caf9;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      color: #1565c0;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* ── Satisfaction Question ── */
+    .question-section {
+      padding: 0 24px 28px;
+    }
+
+    .question-card {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .question-card h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .answer-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .answer-btn {
+      padding: 14px 40px;
+      font-size: 17px;
+      font-weight: 700;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      min-width: 140px;
+    }
+
+    .answer-btn.yes {
+      background: #28a745;
+      color: white;
+    }
+    .answer-btn.yes:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    .answer-btn.yes.selected {
+      background: #218838;
+      border-color: #155724;
+      box-shadow: 0 0 0 3px rgba(40,167,69,.35);
+    }
+
+    .answer-btn.no {
+      background: #dc3545;
+      color: white;
+    }
+    .answer-btn.no:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+    .answer-btn.no.selected {
+      background: #c82333;
+      border-color: #721c24;
+      box-shadow: 0 0 0 3px rgba(220,53,69,.35);
+    }
+
+    /* ── Purchase Options (hidden initially) ── */
+    .purchase-section {
+      display: none;
+      padding: 0 24px 32px;
+      animation: fadeSlideIn .4s ease-out;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .purchase-section.show { display: block; }
+
+    .purchase-card {
+      background: white;
+      border: 2px solid #c5ccd6;
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .purchase-card h3 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .purchase-options {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .purchase-box {
+      flex: 1 1 240px;
+      max-width: 280px;
+      border-radius: 12px;
+      padding: 24px 20px;
+      color: white;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .purchase-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+
+    .purchase-box.slideshow-only {
+      background: linear-gradient(135deg, #5cb85c 0%, #449d44 100%);
+    }
+
+    .purchase-box.video-bundle {
+      background: linear-gradient(135deg, #6b9bd2 0%, #4a7ab5 100%);
+    }
+
+    .purchase-box .price-title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .purchase-box .price-desc {
+      font-size: 13px;
+      opacity: .92;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* Learn-more links row */
+    .learn-more-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .learn-more-btn {
+      flex: 1 1 200px;
+      max-width: 240px;
+      padding: 10px 16px;
+      background: #e8e8e8;
+      border: 2px solid #c5ccd6;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background .15s;
+    }
+
+    .learn-more-btn:hover { background: #ddd; }
+
+    .opt-out {
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color .15s;
+    }
+
+    .opt-out:hover { color: #555; }
+
+    /* ── "No" decline panel ── */
+    .decline-section {
+      display: none;
+      padding: 0 24px 28px;
+      animation: fadeSlideIn .4s ease-out;
+    }
+
+    .decline-section.show { display: block; }
+
+    .decline-card {
+      background: #fff9e6;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .decline-card h3 {
+      color: #856404;
+      margin-bottom: 12px;
+    }
+
+    .decline-card p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .decline-card a {
+      color: #1e3c72;
+      font-weight: 600;
+    }
+
+    /* ── Loading overlay ── */
+    .loading-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9000;
+    }
+
+    .loading-overlay.show { display: flex; }
+
+    .loading-box {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 360px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1e3c72;
+      border-radius: 50%;
+      width: 48px; height: 48px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .container { border-width: 10px; }
+      .header { padding: 20px 16px 14px; }
+      .header h1 { font-size: 20px; }
+      .header-logo { max-width: 280px; }
+      .preview-wrap, .question-section, .purchase-section, .decline-section { padding-left: 14px; padding-right: 14px; }
+      .preview-iframe { height: 300px; }
+      .preview-actions { flex-direction: column; align-items: center; }
+      .purchase-box { max-width: 100%; }
+      .learn-more-btn { max-width: 100%; }
+      .answer-btn { min-width: 120px; padding: 12px 28px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <img src="https://www.dropbox.com/scl/fi/i5ye9vg5wzfvxwyrwczq6/Untitled-940-x-600-px-1400-x-600-px.png?rlkey=rk5t9ot5gchvjcqx71lwiln1o&st=8orea38d&dl=1"
+         alt="Memorial Video AI" class="header-logo">
+    <h1 id="pageTitle">Review Draft Sort &amp; Slides for Your Tribute</h1>
+  </div>
+
+  <!-- Slideshow Preview -->
+  <div class="preview-wrap">
+    <div class="preview-box">
+      <div class="preview-label" id="previewLabel">🔍 Draft Slideshow Preview</div>
+
+      <!-- Iframe (desktop) -->
+      <iframe id="previewIframe" class="preview-iframe" src="" frameborder="0"
+              allowfullscreen></iframe>
+
+      <!-- Mobile fallback (hidden by default) -->
+      <a id="mobileOpenBtn" class="mobile-open-btn" href="" target="_blank"
+         style="display:none;">
+        📱 Tap to View Slideshow in New Tab
+      </a>
+
+      <div class="preview-actions">
+        <a id="editSlidesBtn" class="btn-preview" href="" target="_blank">
+          🎨 Edit My Slides (edits auto-save)
+        </a>
+        <button class="btn-preview" onclick="refreshPreview()">
+          🔄 Refresh Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Satisfaction Question -->
+  <div class="question-section">
+    <div class="question-card">
+      <h2>Are you happy with the initial draft slideshow?</h2>
+      <div class="answer-btns">
+        <button class="answer-btn yes" onclick="handleAnswer('yes')">
+          ✅ Yes
+        </button>
+        <button class="answer-btn no" onclick="handleAnswer('no')">
+          ❌ No
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Purchase Options (shown on "Yes") -->
+  <div class="purchase-section" id="purchaseSection">
+    <div class="purchase-card">
+      <h3>Wonderful. Let's move to the next steps in the tribute creation process:</h3>
+
+      <div class="purchase-options">
+        <!-- Slideshow Only -->
+        <a class="purchase-box slideshow-only" id="buySlideshow" href="#">
+          <span class="price-title">Purchase the Slideshow Only&nbsp;–&nbsp;$39</span>
+          <span class="price-desc">Enjoy a fully editable slideshow tribute from the preview</span>
+        </a>
+
+        <!-- Video Bundle -->
+        <a class="purchase-box video-bundle" id="buyBundle" href="#">
+          <span class="price-title">Purchase the Slideshow &amp; Video Bundle&nbsp;–&nbsp;$49</span>
+          <span class="price-desc">Enjoy fully editable slideshow tribute &amp; HD video with music</span>
+        </a>
+      </div>
+
+      <div class="learn-more-row">
+        <a class="learn-more-btn" href="https://memorialvideo.ai/slideshow" target="_blank">
+          Learn More About Slideshow Product
+        </a>
+        <a class="learn-more-btn" href="https://memorialvideo.ai/video" target="_blank">
+          Learn More About Slideshow Video
+        </a>
+      </div>
+
+      <span class="opt-out" onclick="handleOptOut()">
+        No thanks, I would like to pursue other options for my tribute.
+      </span>
+    </div>
+  </div>
+
+  <!-- Decline Panel (shown on "No") -->
+  <div class="decline-section" id="declineSection">
+    <div class="decline-card">
+      <h3>😊 No problem — we're here to help!</h3>
+      <p>You can edit the slideshow directly using the <strong>"Edit My Slides"</strong> button above. Changes save automatically.</p>
+      <p>Once you're happy with the order, come back and click <strong>Yes</strong> to continue.</p>
+      <p style="margin-top:12px;">Need help? Email us at <a href="mailto:team@memorialvideo.ai">team@memorialvideo.ai</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div style="font-size:18px;font-weight:600;color:#333;">Redirecting to checkout…</div>
+  </div>
+</div>
+
+<script>
+  /* ── URL Params ── */
+  const params  = new URLSearchParams(window.location.search);
+  const uid           = params.get('uid') || '';
+  const email         = params.get('email') || '';
+  const firstName     = params.get('firstName') || '';
+  const fullName      = params.get('fullName') || '';
+  const slideshowUrl  = params.get('slideshowUrl') || '';
+  const customerFirst = params.get('customerFirstName') || '';
+
+  /* ── Stripe Checkout URLs (REPLACE WITH REAL STRIPE LINKS) ── */
+  function buildStripeUrl(priceType) {
+    // These will be Stripe Payment Links or Checkout Sessions
+    // Pass uid + email as metadata so the webhook can tie payment to order
+    const baseSlideshow = 'https://buy.stripe.com/REPLACE_SLIDESHOW_LINK';
+    const baseBundle    = 'https://buy.stripe.com/REPLACE_BUNDLE_LINK';
+
+    const base = priceType === 'slideshow' ? baseSlideshow : baseBundle;
+    // Stripe Payment Links support ?client_reference_id and ?prefilled_email
+    return `${base}?client_reference_id=${encodeURIComponent(uid)}&prefilled_email=${encodeURIComponent(email)}`;
+  }
+
+  /* ── Mobile detection (matches existing form exactly) ── */
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      || window.innerWidth <= 768;
+  }
+
+  /* ── Initialise ── */
+  (function init() {
+    // Page title
+    if (firstName) {
+      document.getElementById('pageTitle').textContent =
+        `Review Draft Sort & Slides for ${firstName}'s Tribute`;
+      document.title = `Review Tribute for ${fullName || firstName}`;
+    }
+
+    // Wire Stripe buttons
+    document.getElementById('buySlideshow').href = buildStripeUrl('slideshow');
+    document.getElementById('buyBundle').href    = buildStripeUrl('bundle');
+
+    // Setup slideshow embed
+    setupEmbed();
+  })();
+
+  /* ── Embed Logic (copied 1-to-1 from existing form) ── */
+  function setupEmbed() {
+    const iframe     = document.getElementById('previewIframe');
+    const mobileBtn  = document.getElementById('mobileOpenBtn');
+    const editBtn    = document.getElementById('editSlidesBtn');
+    const label      = document.getElementById('previewLabel');
+
+    if (!slideshowUrl) return;
+
+    // Google Slides
+    if (slideshowUrl.includes('docs.google.com/presentation')) {
+      const embedUrl = slideshowUrl.replace('/edit', '/embed');
+      label.textContent = '🔍 Draft Google Slides Preview';
+      iframe.src = embedUrl;
+      editBtn.href = slideshowUrl;
+      return;
+    }
+
+    // PowerPoint / OneDrive / SharePoint
+    if (slideshowUrl.includes('sharepoint.com')
+     || slideshowUrl.includes('onedrive.live.com')
+     || slideshowUrl.includes('1drv.ms')) {
+
+      label.textContent = '🔍 Draft PowerPoint Preview';
+
+      if (isMobile()) {
+        iframe.style.display = 'none';
+        mobileBtn.href = slideshowUrl;
+        mobileBtn.style.display = 'block';
+      } else {
+        let embedUrl = slideshowUrl;
+        if (!slideshowUrl.includes('action=embedview')) {
+          const sep = slideshowUrl.includes('?') ? '&' : '?';
+          embedUrl = slideshowUrl + sep + 'action=embedview&wdStartOn=1&em=2';
+        }
+        iframe.src = embedUrl;
+      }
+
+      editBtn.href = slideshowUrl;
+    }
+  }
+
+  /* ── Refresh Preview ── */
+  function refreshPreview() {
+    const iframe = document.getElementById('previewIframe');
+    if (iframe.src) iframe.src = iframe.src;
+  }
+
+  /* ── Answer Handling ── */
+  function handleAnswer(choice) {
+    // Reset button states
+    document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+
+    const purchaseEl = document.getElementById('purchaseSection');
+    const declineEl  = document.getElementById('declineSection');
+
+    if (choice === 'yes') {
+      document.querySelector('.answer-btn.yes').classList.add('selected');
+      purchaseEl.classList.add('show');
+      declineEl.classList.remove('show');
+      // Smooth scroll to purchase options
+      setTimeout(() => purchaseEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    } else {
+      document.querySelector('.answer-btn.no').classList.add('selected');
+      purchaseEl.classList.remove('show');
+      declineEl.classList.add('show');
+      setTimeout(() => declineEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+  }
+
+  /* ── Opt-out ── */
+  function handleOptOut() {
+    if (confirm('Are you sure? You can always come back to this page later.')) {
+      window.location.href = 'https://memorialvideo.ai';
+    }
+  }
+</script>
+</body>
+</html>
