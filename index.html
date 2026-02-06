@@ -552,7 +552,7 @@
     document.getElementById('thankYouModal').classList.add('show');
 
     // Send opt-out email
-    fetch(`https://4hyy6kr2id.execute-api.us-east-2.amazonaws.com/prod/jobs/${uid}/opt-out-email`, {
+    fetch('https://gez1c3ucte.execute-api.us-east-2.amazonaws.com/prod/opt-out-email', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
