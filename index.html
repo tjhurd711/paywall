@@ -377,7 +377,12 @@
   <div class="preview-wrap">
     <div class="preview-box">
       <div class="preview-label" id="previewLabel">🔍 Draft Slideshow Preview</div>
-      <iframe id="previewIframe" class="preview-iframe" src="" frameborder="0" allowfullscreen></iframe>
+      <div style="position: relative; overflow: hidden; border-radius: 8px; border: 2px solid #90caf9; height: 460px;">
+        <iframe id="previewIframe" src="" frameborder="0"
+                style="width: 100%; height: 100%; border: none; background: white;">
+        </iframe>
+        <div style="position: absolute; bottom: 0; right: 0; width: 140px; height: 36px; background: #000; z-index: 10;"></div>
+      </div>
       <a id="mobileOpenBtn" class="mobile-open-btn" href="" target="_blank" style="display:none;">
         📱 Tap to View Slideshow in New Tab
       </a>
