@@ -468,8 +468,8 @@
   const deceasedFull  = params.get('deceasedFullName') || '';
   
   function buildStripeUrl(priceType) {
-    const baseSlideshow = 'https://buy.stripe.com/test_cNi3co2lXb4Qg189cwbZe03';
-    const baseBundle    = 'https://buy.stripe.com/test_14AaEQ7Ghfl64iq0G0bZe04';
+    const baseSlideshow = 'https://buy.stripe.com/6oUcN5a7qdGocYu6Au83C01';
+    const baseBundle    = 'https://buy.stripe.com/bJe7sL4N69q8e2yf7083C00';
     const base = priceType === 'slideshow' ? baseSlideshow : baseBundle;
     return `${base}?client_reference_id=${encodeURIComponent(uid)}&prefilled_email=${encodeURIComponent(email)}`;
   }
